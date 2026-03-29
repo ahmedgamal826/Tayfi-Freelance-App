@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:tayfi/views/home_screen.dart';
+import 'package:tayfi/widgets/splash_widgets/splash_background.dart';
+import 'package:tayfi/widgets/splash_widgets/splash_loading_section.dart';
+import 'package:tayfi/widgets/splash_widgets/splash_logo.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,7 +19,6 @@ class _SplashScreenState extends State<SplashScreen>
   late final Animation<double> _logoOpacity;
   late final Animation<double> _logoRotation;
   late final Animation<double> _textOpacity;
-  late final Animation<double> _textSlide;
   Timer? _navigationTimer;
 
   @override
@@ -57,13 +57,6 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
-    _textSlide = Tween<double>(begin: 26, end: 0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.32, 0.78, curve: Curves.easeOutCubic),
-      ),
-    );
-
     _navigationTimer = Timer(const Duration(milliseconds: 3400), () {
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
@@ -87,13 +80,11 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
-          const _SplashBackground(),
+          const SplashBackground(),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
@@ -105,27 +96,13 @@ class _SplashScreenState extends State<SplashScreen>
                     builder: (context, child) {
                       return Opacity(
                         opacity: _logoOpacity.value,
-                        child: Transform.scale(
+                        child: SplashLogo(
+                          progress: _controller.value,
                           scale: _logoScale.value,
-                          child: Transform.rotate(
-                            angle: _logoRotation.value,
-                            child: Transform.translate(
-                              offset: Offset(
-                                0,
-                                math.sin(_controller.value * 7) * 4,
-                              ),
-                              child: child,
-                            ),
-                          ),
+                          rotation: _logoRotation.value,
                         ),
                       );
                     },
-                    child: Image.asset(
-                      'assets/images/tayfi_splash_logo.png',
-                      width: 290,
-                      height: 290,
-                      fit: BoxFit.contain,
-                    ),
                   ),
                   const Spacer(),
                   AnimatedBuilder(
@@ -136,92 +113,11 @@ class _SplashScreenState extends State<SplashScreen>
                         child: child,
                       );
                     },
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: 130,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(99),
-                            child: const LinearProgressIndicator(
-                              minHeight: 6,
-                              valueColor: AlwaysStoppedAnimation(
-                                Color(0xFF0E5C5A),
-                              ),
-                              backgroundColor: Color(0x110E5C5A),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        Text(
-                          'Preparing your experience...',
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(
-                                color: const Color(0xFF5A7370),
-                                letterSpacing: 0.2,
-                              ),
-                        ),
-                      ],
-                    ),
+                    child: const SplashLoadingSection(),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SplashBackground extends StatelessWidget {
-  const _SplashBackground();
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(color: Colors.white),
-      child: Stack(
-        children: const [
-          Positioned(
-            top: -60,
-            left: -50,
-            child: _FloatingOrb(size: 170, color: Color(0x10D7E6E2)),
-          ),
-          Positioned(
-            top: 120,
-            right: -40,
-            child: _FloatingOrb(size: 140, color: Color(0x10F7E4C4)),
-          ),
-          Positioned(
-            bottom: -70,
-            left: -30,
-            child: _FloatingOrb(size: 180, color: Color(0x100E5C5A)),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FloatingOrb extends StatelessWidget {
-  const _FloatingOrb({required this.size, required this.color});
-
-  final double size;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color,
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.6),
-            blurRadius: 50,
-            spreadRadius: 10,
           ),
         ],
       ),
