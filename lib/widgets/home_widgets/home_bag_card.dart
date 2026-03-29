@@ -18,16 +18,16 @@ class HomeBagCard extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(22),
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(26),
+            borderRadius: BorderRadius.circular(22),
             boxShadow: const [
               BoxShadow(
                 color: Color(0x22000000),
-                blurRadius: 16,
-                offset: Offset(0, 10),
+                blurRadius: 12,
+                offset: Offset(0, 8),
               ),
             ],
           ),
@@ -35,49 +35,69 @@ class HomeBagCard extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(26),
+                borderRadius: BorderRadius.circular(22),
                 child: Image.asset(
                   imagePath,
                   fit: BoxFit.contain,
                 ),
               ),
               Positioned(
-                left: 18,
-                right: 18,
-                bottom: 34,
+                left: 16,
+                right: 16,
+                bottom: 22,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Directionality(
                       textDirection: TextDirection.rtl,
-                      child: Text(
-                        item.arabicTitle,
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              fontSize: 15.5,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
-                              height: 1.05,
-                              shadows: const [
-                                Shadow(
-                                  color: Color(0xCC215B18),
-                                  blurRadius: 5,
-                                  offset: Offset(0, 1),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Text(
+                            item.arabicTitle,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w900,
+                                  foreground: Paint()
+                                    ..style = PaintingStyle.stroke
+                                    ..strokeWidth = 1.4
+                                    ..color = const Color(0xCC215B18),
+                                  height: 1.05,
                                 ),
-                              ],
-                            ),
+                          ),
+                          Text(
+                            item.arabicTitle,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                  height: 1.05,
+                                  shadows: const [
+                                    Shadow(
+                                      color: Color(0xCC215B18),
+                                      blurRadius: 6,
+                                      offset: Offset(0, 1),
+                                    ),
+                                  ],
+                                ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 1),
                     Text(
                       item.englishTitle,
                       textAlign: TextAlign.center,
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontSize: 10,
+                            fontSize: 8.2,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                             height: 1.0,

@@ -15,18 +15,19 @@ class HomeBagGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.fromLTRB(18, 4, 18, 14),
       itemCount: items.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 18,
-        mainAxisSpacing: 24,
-        childAspectRatio: 0.9,
+        crossAxisSpacing: 14,
+        mainAxisSpacing: 12,
+        childAspectRatio: 1.28,
       ),
       itemBuilder: (context, index) {
         final item = items[index];
         return HomeBagCard(
-          imagePath: 'assets/images/bagImage.png',
+          imagePath: item.imagePath,
           item: item,
           onTap: () => onBagTap(item),
         );

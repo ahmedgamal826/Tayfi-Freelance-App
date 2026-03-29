@@ -11,34 +11,42 @@ class HomeScreen extends StatelessWidget {
     BagItem(
       arabicTitle: 'المهارات الحياتية',
       englishTitle: 'Social Skills',
+      imagePath: 'assets/images/purpleBag.png',
     ),
     BagItem(
       arabicTitle: 'التواصل البصري',
       englishTitle: 'Visual Communication',
+      imagePath: 'assets/images/greenImage.png',
     ),
     BagItem(
       arabicTitle: 'التفاعل الاجتماعي',
       englishTitle: 'Social Interaction',
+      imagePath: 'assets/images/orangeBag.png',
     ),
     BagItem(
       arabicTitle: 'تعديل السلوك',
       englishTitle: 'Behavior Development',
+      imagePath: 'assets/images/blueBag.png',
     ),
     BagItem(
       arabicTitle: 'التواصل السمعي',
       englishTitle: 'Auditory Communication',
+      imagePath: 'assets/images/yellowBag.png',
     ),
     BagItem(
       arabicTitle: 'الأمان',
       englishTitle: 'Safety',
+      imagePath: 'assets/images/blackBag.png',
     ),
     BagItem(
       arabicTitle: 'تنمية المهارات المعرفية',
       englishTitle: 'Cognitive Skills Development',
+      imagePath: 'assets/images/pinkBag.png',
     ),
     BagItem(
       arabicTitle: 'التعلم الأكاديمي',
       englishTitle: 'Academic Learning',
+      imagePath: 'assets/images/redBag.png',
     ),
   ];
 
@@ -52,7 +60,7 @@ class HomeScreen extends StatelessWidget {
           SafeArea(
             child: Column(
               children: [
-                const SizedBox(height: 190),
+                const SizedBox(height: 178),
                 Expanded(
                   child: HomeBagGrid(
                     items: _bagItems,
