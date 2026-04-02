@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tayfi/services/sound_service.dart';
 import 'package:tayfi/views/splash_screen.dart';
 
 Future<void> main() async {
@@ -9,6 +10,7 @@ Future<void> main() async {
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
+  await SoundService.prewarm();
   runApp(const TayfiApp());
 }
 

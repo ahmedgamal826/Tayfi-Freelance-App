@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:tayfi/widgets/tool_widgets/tool_details_app_bar.dart';
 import 'package:tayfi/widgets/tool_widgets/tool_details_info_card.dart';
@@ -27,6 +28,24 @@ class _VideoWebViewScreenState extends State<VideoWebViewScreen> {
   YoutubePlayerController? _controller;
   String? _videoId;
 
+  Future<void> _setLandscapeOrientation() async {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  Future<void> _setPortraitOrientation() async {
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  }
+
+  Future<void> _reloadVideo() async {
+    final controller = _controller;
+    final videoId = _videoId;
+    if (controller == null || videoId == null || videoId.isEmpty) return;
+    controller.load(videoId);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +66,7 @@ class _VideoWebViewScreenState extends State<VideoWebViewScreen> {
 
   @override
   void dispose() {
+    _setPortraitOrientation();
     _controller?.dispose();
     super.dispose();
   }
@@ -62,7 +82,11 @@ class _VideoWebViewScreenState extends State<VideoWebViewScreen> {
         appBar: ToolDetailsAppBar(
           titleArabic: widget.titleArabic,
           titleEnglish: widget.titleEnglish,
-          onBack: () => Navigator.of(context).pop(),
+          onBack: () async {
+            await _setPortraitOrientation();
+            if (!mounted) return;
+            Navigator.of(context).pop();
+          },
         ),
         body: Stack(
           fit: StackFit.expand,
@@ -76,6 +100,12 @@ class _VideoWebViewScreenState extends State<VideoWebViewScreen> {
               top: false,
               child: hasValidVideo
                   ? YoutubePlayerBuilder(
+                      onEnterFullScreen: () async {
+                        await _setLandscapeOrientation();
+                      },
+                      onExitFullScreen: () async {
+                        await _setPortraitOrientation();
+                      },
                       player: YoutubePlayer(
                         controller: _controller!,
                         showVideoProgressIndicator: true,
@@ -94,22 +124,46 @@ class _VideoWebViewScreenState extends State<VideoWebViewScreen> {
                             final verticalPadding = isLandscape ? 12.0 : 10.0;
 
                             Widget buildVideoCard(double aspectRatio) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(18),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Color(0x55000000),
-                                      blurRadius: 24,
-                                      offset: Offset(0, 12),
+                              return AspectRatio(
+                                aspectRatio: aspectRatio,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(18),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Color(0x55000000),
+                                        blurRadius: 24,
+                                        offset: Offset(0, 12),
+                                      ),
+                                    ],
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(18),
+                                    child: Stack(
+                                      fit: StackFit.expand,
+                                      children: [
+                                        player,
+                                        Positioned(
+                                          top: 10,
+                                          right: 10,
+                                          child: FilledButton.tonalIcon(
+                                            onPressed: _reloadVideo,
+                                            icon: const Icon(
+                                              Icons.refresh_rounded,
+                                              size: 18,
+                                            ),
+                                            label: const Text('إعادة التشغيل'),
+                                            style: FilledButton.styleFrom(
+                                              backgroundColor: Colors.black
+                                                  .withValues(alpha: 0.55),
+                                              foregroundColor: Colors.white,
+                                              visualDensity:
+                                                  VisualDensity.compact,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(18),
-                                  child: AspectRatio(
-                                    aspectRatio: aspectRatio,
-                                    child: player,
                                   ),
                                 ),
                               );
