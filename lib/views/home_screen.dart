@@ -95,7 +95,7 @@ class HomeScreen extends StatelessWidget {
                           return HomeBagGrid(
                             items: items,
                             onBagTap: (item) async {
-                              await SoundService.playCategoryClick();
+                              await SoundService.playToolTone();
                               if (!context.mounted) return;
                               Navigator.of(context).push(
                                 MaterialPageRoute<void>(

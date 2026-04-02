@@ -23,7 +23,7 @@ class BagLearningCard extends StatelessWidget {
 
     if (!context.mounted) return;
 
-    await SoundService.playToolTone();
+    await SoundService.playCategoryClick();
     if (!context.mounted) return;
 
     await Navigator.of(context).push(
